@@ -20,4 +20,4 @@ By the other hand but not less important.  I enjoy by tons too playing at League
 
 Hope you can find all this content usefull for starting and to get better in iOS development.
 
-Cya, I love you, Andrés:]
+Cya.  Love you, Andrés:]
