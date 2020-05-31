@@ -18,6 +18,6 @@ I want to be one of the best iOS programmer anyone can meet.  To get knowledge b
 
 By the other hand but not less important.  I enjoy by tons too playing at League of Legends.  So If you like League too, for sure we're going to be best friends xD.
 
-Hope you can find all this content usefull for starting and to get better in iOS development.
+Hope you can find all this content usefull for starting and to get better in iOS development just like I'm doing at this moment.
 
 Cya.  Love you, Andrés:]
