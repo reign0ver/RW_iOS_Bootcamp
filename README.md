@@ -4,6 +4,8 @@ Hey guys! Let me introduce myself:
 
 My name is Andrés Carrillo,
 
+<img src="https://user-images.githubusercontent.com/37129888/83342217-3416a880-a2b2-11ea-8433-2f4991d80db2.jpg" alt="drawing" width="450"/>
+
 My Discord Username is: kOda#4339
 
 I'm from Colombia:).  I currently live in Medellín, but I'm from a small city called Cúcuta:)
