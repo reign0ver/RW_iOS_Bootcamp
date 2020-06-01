@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		D16B475724830EFC00D107A2 /* ColorPickerViewControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16B475624830EFC00D107A2 /* ColorPickerViewControllerHelper.swift */; };
+		D187B3FB2484588A000B45B7 /* AboutRGBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D187B3FA2484588A000B45B7 /* AboutRGBViewController.swift */; };
+		D187B3FE24845E45000B45B7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D187B3FD24845E45000B45B7 /* WebKit.framework */; };
 		D1ACD2FC2482DC37003DD376 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1ACD2FB2482DC37003DD376 /* AppDelegate.swift */; };
 		D1ACD2FE2482DC37003DD376 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1ACD2FD2482DC37003DD376 /* SceneDelegate.swift */; };
 		D1ACD3002482DC37003DD376 /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1ACD2FF2482DC37003DD376 /* ColorPickerViewController.swift */; };
@@ -19,6 +21,8 @@
 
 /* Begin PBXFileReference section */
 		D16B475624830EFC00D107A2 /* ColorPickerViewControllerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewControllerHelper.swift; sourceTree = "<group>"; };
+		D187B3FA2484588A000B45B7 /* AboutRGBViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutRGBViewController.swift; sourceTree = "<group>"; };
+		D187B3FD24845E45000B45B7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		D1ACD2F82482DC37003DD376 /* RGBPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RGBPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1ACD2FB2482DC37003DD376 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D1ACD2FD2482DC37003DD376 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -35,17 +39,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D187B3FE24845E45000B45B7 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D187B3FC24845E45000B45B7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D187B3FD24845E45000B45B7 /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D1ACD2EF2482DC37003DD376 = {
 			isa = PBXGroup;
 			children = (
 				D1ACD2FA2482DC37003DD376 /* RGBPicker */,
 				D1ACD2F92482DC37003DD376 /* Products */,
+				D187B3FC24845E45000B45B7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,7 +74,7 @@
 		D1ACD2FA2482DC37003DD376 /* RGBPicker */ = {
 			isa = PBXGroup;
 			children = (
-				D1ACD3112482E0C0003DD376 /* CustomGenericViews */,
+				D1ACD3112482E0C0003DD376 /* GenericViews */,
 				D1ACD2FB2482DC37003DD376 /* AppDelegate.swift */,
 				D1ACD2FD2482DC37003DD376 /* SceneDelegate.swift */,
 				D1ACD2FF2482DC37003DD376 /* ColorPickerViewController.swift */,
@@ -73,12 +87,13 @@
 			path = RGBPicker;
 			sourceTree = "<group>";
 		};
-		D1ACD3112482E0C0003DD376 /* CustomGenericViews */ = {
+		D1ACD3112482E0C0003DD376 /* GenericViews */ = {
 			isa = PBXGroup;
 			children = (
 				D1ACD30F2482DF0F003DD376 /* GenericSliderComponent.swift */,
+				D187B3FA2484588A000B45B7 /* AboutRGBViewController.swift */,
 			);
-			path = CustomGenericViews;
+			path = GenericViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -154,6 +169,7 @@
 				D1ACD3002482DC37003DD376 /* ColorPickerViewController.swift in Sources */,
 				D1ACD3132482E366003DD376 /* PickerType.swift in Sources */,
 				D16B475724830EFC00D107A2 /* ColorPickerViewControllerHelper.swift in Sources */,
+				D187B3FB2484588A000B45B7 /* AboutRGBViewController.swift in Sources */,
 				D1ACD2FC2482DC37003DD376 /* AppDelegate.swift in Sources */,
 				D1ACD3102482DF0F003DD376 /* GenericSliderComponent.swift in Sources */,
 				D1ACD2FE2482DC37003DD376 /* SceneDelegate.swift in Sources */,

@@ -10,10 +10,10 @@ import UIKit
 
 class GenericSliderComponent: UIView {
     
-    private var colorName: String?
-    private var pickerType: PickerType?
-    private var minValue: Int = 0
-    private var maxValue: Int = 255
+    var colorName: String!
+    var pickerType: PickerType!
+    var minValue: Int = 0
+    var maxValue: Int = 255
     var currentValue: Int = 0
     
     //MARK: - Init
@@ -24,13 +24,11 @@ class GenericSliderComponent: UIView {
     
     init(colorName: String, _ pickerType: PickerType) {
         super.init(frame: .zero)
-        self.colorName = colorName
+        self.colorName = colorName.uppercased()
         self.pickerType = pickerType
         addSubviews()
         setupConstraints()
         setupView()
-        
-        slider.addTarget(self, action: #selector(sliderHandler), for: .valueChanged)
     }
     
     required init?(coder: NSCoder) {
@@ -41,7 +39,7 @@ class GenericSliderComponent: UIView {
     
     lazy var colorNameLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = .darkGray
         label.text = "\(colorName!): \(currentValue)"
         
         return label
@@ -51,6 +49,8 @@ class GenericSliderComponent: UIView {
         let slider = UISlider()
         slider.minimumValue = Float(minValue)
         slider.maximumValue = Float(maxValue)
+        slider.tintColor = UIColor(named: colorName!.lowercased())
+        slider.thumbTintColor = UIColor(named: colorName!.lowercased())
         
         return slider
     }()
@@ -58,24 +58,24 @@ class GenericSliderComponent: UIView {
     lazy var zeroLabel: UILabel = {
         let label = UILabel()
         label.text = "\(minValue)"
-        label.textColor = .white
+        label.textColor = .darkGray
         
         return label
     }()
     
-    lazy var currentValueLabel: UILabel = {
+    lazy var maxValueLabel: UILabel = {
         let label = UILabel()
         label.text = "\(maxValue)"
-        label.textColor = .white
+        label.textColor = .darkGray
         
         return label
     }()
     
-    lazy var sliderStackView: UIStackView = {
+    lazy private var sliderStackView: UIStackView = {
         let stack = UIStackView()
         stack.addArrangedSubview(zeroLabel)
         stack.addArrangedSubview(slider)
-        stack.addArrangedSubview(currentValueLabel)
+        stack.addArrangedSubview(maxValueLabel)
         
         stack.spacing = 8
         stack.axis = .horizontal
@@ -88,7 +88,7 @@ class GenericSliderComponent: UIView {
     //MARK: - Adding views and setting up constraints
     
     private func setupView () {
-        backgroundColor = .lightGray
+        backgroundColor = .lightText
         layer.cornerRadius = 6
     }
     
@@ -117,14 +117,6 @@ class GenericSliderComponent: UIView {
             sliderStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             sliderStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
         ])
-    }
-    
-    //MARK: - Handler Events
-    
-    @objc func sliderHandler () {
-        let roundedValue = slider.value.rounded()
-        currentValue = Int(roundedValue)
-        colorNameLabel.text = "\(colorName!): \(currentValue)"
     }
     
 }
