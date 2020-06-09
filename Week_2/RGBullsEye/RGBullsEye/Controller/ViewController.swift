@@ -23,6 +23,19 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    var quickRedDiff: Int {
+        return abs(game.targetValue.r - game.currentValue.r)
+    }
+    
+    var quickGreenDiff: Int {
+        return abs(game.targetValue.g - game.currentValue.g)
+    }
+    
+    var quickBlueDiff: Int {
+        return abs(game.targetValue.b - game.currentValue.b)
+    }
+    
     @IBOutlet weak var targetLabel: UILabel!
     @IBOutlet weak var targetTextLabel: UILabel!
     @IBOutlet weak var guessLabel: UILabel!
@@ -38,8 +51,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var roundLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     
-    let game = BullsEyeGame()
-    var rgb = RGB()
+    private let game = BullsEyeGame()
     
     @IBAction func aSliderMoved(sender: UISlider) {
         let red = Int(redSlider.value.rounded())
@@ -72,7 +84,7 @@ class ViewController: UIViewController {
         updateView()
     }
     
-    func updateView() {
+    private func updateView() {
         targetLabel.backgroundColor = UIColor(rgbStruct: game.targetValue)
         scoreLabel.text = String(game.score)
         roundLabel.text = String(game.round)
@@ -82,12 +94,20 @@ class ViewController: UIViewController {
         updateGuessViews()
     }
     
-    func updateGuessViews () {
+    private func updateGuessViews () {
         let currentValue = game.currentValue
         guessLabel.backgroundColor = UIColor(rgbStruct: currentValue)
         redLabel.text = "R: \(currentValue.r)"
         greenLabel.text = "G: \(currentValue.g)"
         blueLabel.text = "B: \(currentValue.b)"
+        colderWarmerHint()
+    }
+    
+    private func colderWarmerHint () {
+        redSlider.minimumTrackTintColor = UIColor.blue.withAlphaComponent(CGFloat(quickRedDiff) / 100.0)
+        greenSlider.minimumTrackTintColor = UIColor.blue.withAlphaComponent(CGFloat(quickGreenDiff) / 100.0)
+        blueSlider.minimumTrackTintColor = UIColor.blue.withAlphaComponent(CGFloat(quickBlueDiff) / 100.0)
+
     }
     
     override func viewDidLoad() {
