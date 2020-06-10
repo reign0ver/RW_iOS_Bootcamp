@@ -1,5 +1,5 @@
 
-#Struct or Class? :thinking_face:
+# Struct or Class? 
 
 As we know Apple recommends Struct all the time, unless you need a class feature.
 
