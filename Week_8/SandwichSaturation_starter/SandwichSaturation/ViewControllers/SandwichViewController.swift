@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 protocol SandwichDataSource {
-  func saveSandwich(_: SandwichData)
+  func saveNewSandwich(_: SandwichData)
 }
 
 class SandwichViewController: UITableViewController, SandwichDataSource {
@@ -55,22 +55,47 @@ class SandwichViewController: UITableViewController, SandwichDataSource {
     let indexScopeSaved = UserDefaults.standard.integer(forKey: indexScopeKey)
     searchController.searchBar.selectedScopeButtonIndex = indexScopeSaved
   }
+    
+  func fetchSandwichesFromLocalDB () -> [Sandwich] {
+    let request = NSFetchRequest<Sandwich>(entityName: "Sandwich")
+    do {
+      return try viewContext.fetch(request)
+    } catch let error {
+      print(error.localizedDescription)
+    }
+    return []
+  }
   
   func loadSandwiches() {
-    guard let sandwichesJSONURL = Bundle.main.url(forResource: "sandwiches", withExtension: "json") else { return }
-    
-    let decoder = JSONDecoder()
-    
-    do {
-      let sandwichesData = try Data(contentsOf: sandwichesJSONURL)
-      let sandwiches = try decoder.decode([SandwichData].self, from: sandwichesData)
-      self.sandwiches = sandwiches
-    } catch let error {
+    let sandwichesFromDB = fetchSandwichesFromLocalDB()
+    if sandwichesFromDB.count == 0 {
+      guard let sandwichesJSONURL = Bundle.main.url(forResource: "sandwiches", withExtension: "json") else { return }
+      do {
+        let decoder = JSONDecoder()
+        let sandwichesData = try Data(contentsOf: sandwichesJSONURL)
+        let sandwiches = try decoder.decode([SandwichData].self, from: sandwichesData)
+        self.sandwiches = sandwiches
+        for sandwich in sandwiches {
+          persistSandwich(sandwich)
+        }
+      } catch let error {
         print(error)
+      }
+    } else {
+        self.sandwiches = sandwichesFromDB.map { SandwichData(sandwichCoreData: $0) }
     }
   }
+    
+  func persistSandwich(_ sandwich: SandwichData) {
+    let sandwichCoreData = Sandwich(entity: Sandwich.entity(), insertInto: viewContext)
+    sandwichCoreData.name = sandwich.name
+    sandwichCoreData.imageName = sandwich.imageName
+    sandwichCoreData.sauceAmount = sandwich.sauceAmount.rawValue
+    appDelegate.saveContext()
+  }
 
-  func saveSandwich(_ sandwich: SandwichData) {
+  func saveNewSandwich(_ sandwich: SandwichData) {
+    persistSandwich(sandwich)
     sandwiches.append(sandwich)
     tableView.reloadData()
   }

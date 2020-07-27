@@ -30,6 +30,18 @@ struct SandwichData: Decodable {
   let name: String
   let sauceAmount: SauceAmount
   let imageName: String
+    
+  init(sandwichCoreData: Sandwich) {
+    self.name = sandwichCoreData.name ?? ""
+    self.sauceAmount = SauceAmount(rawValue: sandwichCoreData.sauceAmount ?? "Any Amount")!
+    self.imageName = sandwichCoreData.imageName ?? "sandwich1"
+  }
+    
+    init(name: String, sauceAmount: SauceAmount, imageName: String) {
+    self.name = name
+    self.sauceAmount = sauceAmount
+    self.imageName = imageName
+  }
 }
 
 extension SauceAmount: CaseIterable { }
