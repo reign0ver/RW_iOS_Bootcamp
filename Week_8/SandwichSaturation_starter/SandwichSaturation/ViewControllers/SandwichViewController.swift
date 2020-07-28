@@ -19,8 +19,6 @@ class SandwichViewController: UITableViewController, SandwichDataSource {
   var viewContext: NSManagedObjectContext!
     
   let searchController = UISearchController(searchResultsController: nil)
-  //var sandwiches = [SandwichData]()
-  //var filteredSandwiches = [SandwichData]()
   var sandwiches = [Sandwich]()
   var filteredSandwiches = [Sandwich]()
     
@@ -41,71 +39,13 @@ class SandwichViewController: UITableViewController, SandwichDataSource {
         
     let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddView(_:)))
     navigationItem.rightBarButtonItem = addButton
-    
-    // Setup Search Controller
-    searchController.searchResultsUpdater = self
-    searchController.obscuresBackgroundDuringPresentation = false
-    searchController.searchBar.placeholder = "Filter Sandwiches"
-    navigationItem.searchController = searchController
-    definesPresentationContext = true
-    searchController.searchBar.scopeButtonTitles = SauceAmount.allCases.map { $0.rawValue }
-    searchController.searchBar.delegate = self
+    setupSearchController()
   }
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     let indexScopeSaved = UserDefaults.standard.integer(forKey: indexScopeKey)
     searchController.searchBar.selectedScopeButtonIndex = indexScopeSaved
-  }
-    
-  func fetchSandwichesFromLocalDB () -> [Sandwich] {
-    let request = NSFetchRequest<Sandwich>(entityName: "Sandwich")
-    do {
-      return try viewContext.fetch(request)
-    } catch let error {
-      print(error.localizedDescription)
-    }
-    return []
-  }
-  
-  func loadSandwiches() {
-    let sandwichesFromDB = fetchSandwichesFromLocalDB()
-    if sandwichesFromDB.count == 0 {
-      guard let sandwichesJSONURL = Bundle.main.url(forResource: "sandwiches", withExtension: "json") else { return }
-      do {
-        let decoder = JSONDecoder()
-        let sandwichesData = try Data(contentsOf: sandwichesJSONURL)
-        let sandwiches = try decoder.decode([SandwichData].self, from: sandwichesData)
-        for sandwich in sandwiches {
-          let coreDataSandwich = persistSandwich(sandwich)
-            self.sandwiches.append(coreDataSandwich)
-        }
-      } catch let error {
-        print(error)
-      }
-    } else {
-        self.sandwiches = sandwichesFromDB
-    }
-  }
-    
-  func persistSandwich(_ sandwich: SandwichData) -> Sandwich {
-    let sandwichCoreData = Sandwich(entity: Sandwich.entity(), insertInto: viewContext)
-    sandwichCoreData.name = sandwich.name
-    sandwichCoreData.imageName = sandwich.imageName
-    sandwichCoreData.sauceAmount = sandwich.sauceAmount.rawValue
-    appDelegate.saveContext()
-    return sandwichCoreData
-  }
-    
-  func deleteSandwich(_ sandwich: Sandwich) {
-    viewContext.delete(sandwich)
-    appDelegate.saveContext()
-  }
-
-  func saveNewSandwich(_ sandwichData: SandwichData) {
-    let sandwich = persistSandwich(sandwichData)
-    sandwiches.append(sandwich)
-    tableView.reloadData()
   }
 
   @objc
@@ -119,18 +59,11 @@ class SandwichViewController: UITableViewController, SandwichDataSource {
   }
   
   func filterContentForSearchText(_ searchText: String, sauceAmount: SauceAmount? = nil) {
-//    filteredSandwiches = sandwiches.filter { (sandwhich: SandwichData) -> Bool in
-//      let doesSauceAmountMatch = sauceAmount == .any || sandwhich.sauceAmount == sauceAmount
-//
-//      if isSearchBarEmpty {
-//        return doesSauceAmountMatch
-//      } else {
-//        return doesSauceAmountMatch && sandwhich.name.lowercased()
-//          .contains(searchText.lowercased())
-//      }
-//    }
-//
-//    tableView.reloadData()
+    filteredSandwiches = sandwiches.filter { (sandwhich: Sandwich) -> Bool in
+      let doesSauceAmountMatch = sauceAmount == .any || sandwhich.sauceAmount == sauceAmount?.rawValue
+      return isSearchBarEmpty ? doesSauceAmountMatch : doesSauceAmountMatch && sandwhich.name.lowercased().contains(searchText.lowercased())
+    }
+    tableView.reloadData()
   }
   
   var isFiltering: Bool {
@@ -153,9 +86,7 @@ class SandwichViewController: UITableViewController, SandwichDataSource {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: "sandwichCell", for: indexPath) as? SandwichCell
       else { return UITableViewCell() }
     
-    let sandwich = isFiltering ?
-      filteredSandwiches[indexPath.row] :
-      sandwiches[indexPath.row]
+    let sandwich = isFiltering ? filteredSandwiches[indexPath.row] : sandwiches[indexPath.row]
 
     cell.thumbnail.image = UIImage.init(imageLiteralResourceName: sandwich.imageName)
     cell.nameLabel.text = sandwich.name
@@ -166,10 +97,11 @@ class SandwichViewController: UITableViewController, SandwichDataSource {
     
   override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
     if editingStyle == .delete {
-      let sandwich = sandwiches[indexPath.row]
-      sandwiches.remove(at: indexPath.row)
-      tableView.deleteRows(at: [indexPath], with: .fade)
+      let sandwich = !isFiltering ? sandwiches[indexPath.row] : filteredSandwiches[indexPath.row]
+      let _ = !isFiltering ? sandwiches.remove(at: indexPath.row) : filteredSandwiches.remove(at: indexPath.row)
       deleteSandwich(sandwich)
+      loadSandwiches()
+      tableView.deleteRows(at: [indexPath], with: .fade)
     }
   }
     
@@ -188,12 +120,75 @@ extension SandwichViewController: UISearchResultsUpdating {
 
 // MARK: - UISearchBarDelegate
 extension SandwichViewController: UISearchBarDelegate {
-  func searchBar(_ searchBar: UISearchBar,
-                   selectedScopeButtonIndexDidChange selectedScope: Int) {
-    let sauceAmount = SauceAmount(rawValue:
-      searchBar.scopeButtonTitles![selectedScope])
+    
+  private func setupSearchController() {
+    searchController.searchResultsUpdater = self
+    searchController.obscuresBackgroundDuringPresentation = false
+    searchController.searchBar.placeholder = "Filter Sandwiches"
+    navigationItem.searchController = searchController
+    definesPresentationContext = true
+    searchController.searchBar.scopeButtonTitles = SauceAmount.allCases.map { $0.rawValue }
+    searchController.searchBar.delegate = self
+  }
+    
+  func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+    let sauceAmount = SauceAmount(rawValue: searchBar.scopeButtonTitles![selectedScope])
     filterContentForSearchText(searchBar.text!, sauceAmount: sauceAmount)
     UserDefaults.standard.set(selectedScope, forKey: indexScopeKey)
   }
+}
+
+//MARK: - CoreData CRUD Methods
+
+extension SandwichViewController {
+    func fetchSandwichesFromLocalDB () -> [Sandwich] {
+      let request = NSFetchRequest<Sandwich>(entityName: "Sandwich")
+      do {
+        return try viewContext.fetch(request)
+      } catch let error {
+        print(error.localizedDescription)
+      }
+      return []
+    }
+    
+    func loadSandwiches() {
+      let sandwichesFromDB = fetchSandwichesFromLocalDB()
+      if sandwichesFromDB.count == 0 {
+        guard let sandwichesJSONURL = Bundle.main.url(forResource: "sandwiches", withExtension: "json") else { return }
+        do {
+          let decoder = JSONDecoder()
+          let sandwichesData = try Data(contentsOf: sandwichesJSONURL)
+          let sandwiches = try decoder.decode([SandwichData].self, from: sandwichesData)
+          for sandwich in sandwiches {
+            let coreDataSandwich = persistSandwich(sandwich)
+              self.sandwiches.append(coreDataSandwich)
+          }
+        } catch let error {
+          print(error)
+        }
+      } else {
+          self.sandwiches = sandwichesFromDB
+      }
+    }
+      
+    func persistSandwich(_ sandwich: SandwichData) -> Sandwich {
+      let sandwichCoreData = Sandwich(entity: Sandwich.entity(), insertInto: viewContext)
+      sandwichCoreData.name = sandwich.name
+      sandwichCoreData.imageName = sandwich.imageName
+      sandwichCoreData.sauceAmount = sandwich.sauceAmount.rawValue
+      appDelegate.saveContext()
+      return sandwichCoreData
+    }
+      
+    func deleteSandwich(_ sandwich: Sandwich) {
+      viewContext.delete(sandwich)
+      appDelegate.saveContext()
+    }
+
+    func saveNewSandwich(_ sandwichData: SandwichData) {
+      let sandwich = persistSandwich(sandwichData)
+      sandwiches.append(sandwich)
+      tableView.reloadData()
+    }
 }
 

@@ -39,7 +39,7 @@
 		12A0791724B2CC9A0097F149 /* sandwiches.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sandwiches.json; sourceTree = "<group>"; };
 		22382B5B24C67482009B11D6 /* Sandwich.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sandwich.xcdatamodel; sourceTree = "<group>"; };
 		22382B5E24C676D2009B11D6 /* Sandwich+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sandwich+CoreDataClass.swift"; sourceTree = "<group>"; };
-		2273FD3724CFC73A00BC6218 /* Sandwich+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Sandwich+CoreDataProperties.swift"; path = "SandwichSaturation/Model/CoreDataModels/Sandwich+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2273FD3724CFC73A00BC6218 /* Sandwich+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sandwich+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +56,6 @@
 		1255796E24AFB8FA004C616F = {
 			isa = PBXGroup;
 			children = (
-				2273FD3724CFC73A00BC6218 /* Sandwich+CoreDataProperties.swift */,
 				1255797924AFB8FA004C616F /* SandwichSaturation */,
 				1255797824AFB8FA004C616F /* Products */,
 			);
@@ -73,8 +72,7 @@
 		1255797924AFB8FA004C616F /* SandwichSaturation */ = {
 			isa = PBXGroup;
 			children = (
-				1255797A24AFB8FA004C616F /* AppDelegate.swift */,
-				1255797C24AFB8FA004C616F /* SceneDelegate.swift */,
+				2273FD3924CFFE5900BC6218 /* Base */,
 				12A0791224AFDD810097F149 /* Model */,
 				1255799424AFCBDE004C616F /* View */,
 				12A0790F24AFDC2F0097F149 /* ViewControllers */,
@@ -118,9 +116,27 @@
 		22382B5D24C6769A009B11D6 /* CoreDataModels */ = {
 			isa = PBXGroup;
 			children = (
-				22382B5E24C676D2009B11D6 /* Sandwich+CoreDataClass.swift */,
+				2273FD3B24CFFE8B00BC6218 /* Sandwich */,
 			);
 			path = CoreDataModels;
+			sourceTree = "<group>";
+		};
+		2273FD3924CFFE5900BC6218 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				1255797A24AFB8FA004C616F /* AppDelegate.swift */,
+				1255797C24AFB8FA004C616F /* SceneDelegate.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		2273FD3B24CFFE8B00BC6218 /* Sandwich */ = {
+			isa = PBXGroup;
+			children = (
+				22382B5E24C676D2009B11D6 /* Sandwich+CoreDataClass.swift */,
+				2273FD3724CFC73A00BC6218 /* Sandwich+CoreDataProperties.swift */,
+			);
+			path = Sandwich;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
