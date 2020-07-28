@@ -2,7 +2,7 @@
 //  Sandwich+CoreDataProperties.swift
 //  SandwichSaturation
 //
-//  Created by Andrés Carrillo on 20/07/20.
+//  Created by Andrés Carrillo on 27/07/20.
 //  Copyright © 2020 Jeff Rames. All rights reserved.
 //
 //
@@ -17,8 +17,8 @@ extension Sandwich {
         return NSFetchRequest<Sandwich>(entityName: "Sandwich")
     }
 
-    @NSManaged public var name: String?
-    @NSManaged public var sauceAmount: String?
-    @NSManaged public var imageName: String?
+    @NSManaged public var imageName: String
+    @NSManaged public var name: String
+    @NSManaged public var sauceAmount: String
 
 }

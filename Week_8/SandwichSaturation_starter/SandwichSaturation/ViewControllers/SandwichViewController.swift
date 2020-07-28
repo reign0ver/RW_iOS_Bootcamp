@@ -19,8 +19,10 @@ class SandwichViewController: UITableViewController, SandwichDataSource {
   var viewContext: NSManagedObjectContext!
     
   let searchController = UISearchController(searchResultsController: nil)
-  var sandwiches = [SandwichData]()
-  var filteredSandwiches = [SandwichData]()
+  //var sandwiches = [SandwichData]()
+  //var filteredSandwiches = [SandwichData]()
+  var sandwiches = [Sandwich]()
+  var filteredSandwiches = [Sandwich]()
     
   //MARK: Constants
   let indexScopeKey = "KEY_INDEX_SCOPE"
@@ -74,28 +76,34 @@ class SandwichViewController: UITableViewController, SandwichDataSource {
         let decoder = JSONDecoder()
         let sandwichesData = try Data(contentsOf: sandwichesJSONURL)
         let sandwiches = try decoder.decode([SandwichData].self, from: sandwichesData)
-        self.sandwiches = sandwiches
         for sandwich in sandwiches {
-          persistSandwich(sandwich)
+          let coreDataSandwich = persistSandwich(sandwich)
+            self.sandwiches.append(coreDataSandwich)
         }
       } catch let error {
         print(error)
       }
     } else {
-        self.sandwiches = sandwichesFromDB.map { SandwichData(sandwichCoreData: $0) }
+        self.sandwiches = sandwichesFromDB
     }
   }
     
-  func persistSandwich(_ sandwich: SandwichData) {
+  func persistSandwich(_ sandwich: SandwichData) -> Sandwich {
     let sandwichCoreData = Sandwich(entity: Sandwich.entity(), insertInto: viewContext)
     sandwichCoreData.name = sandwich.name
     sandwichCoreData.imageName = sandwich.imageName
     sandwichCoreData.sauceAmount = sandwich.sauceAmount.rawValue
     appDelegate.saveContext()
+    return sandwichCoreData
+  }
+    
+  func deleteSandwich(_ sandwich: Sandwich) {
+    viewContext.delete(sandwich)
+    appDelegate.saveContext()
   }
 
-  func saveNewSandwich(_ sandwich: SandwichData) {
-    persistSandwich(sandwich)
+  func saveNewSandwich(_ sandwichData: SandwichData) {
+    let sandwich = persistSandwich(sandwichData)
     sandwiches.append(sandwich)
     tableView.reloadData()
   }
@@ -110,25 +118,23 @@ class SandwichViewController: UITableViewController, SandwichDataSource {
     return searchController.searchBar.text?.isEmpty ?? true
   }
   
-  func filterContentForSearchText(_ searchText: String,
-                                  sauceAmount: SauceAmount? = nil) {
-    filteredSandwiches = sandwiches.filter { (sandwhich: SandwichData) -> Bool in
-      let doesSauceAmountMatch = sauceAmount == .any || sandwhich.sauceAmount == sauceAmount
-
-      if isSearchBarEmpty {
-        return doesSauceAmountMatch
-      } else {
-        return doesSauceAmountMatch && sandwhich.name.lowercased()
-          .contains(searchText.lowercased())
-      }
-    }
-    
-    tableView.reloadData()
+  func filterContentForSearchText(_ searchText: String, sauceAmount: SauceAmount? = nil) {
+//    filteredSandwiches = sandwiches.filter { (sandwhich: SandwichData) -> Bool in
+//      let doesSauceAmountMatch = sauceAmount == .any || sandwhich.sauceAmount == sauceAmount
+//
+//      if isSearchBarEmpty {
+//        return doesSauceAmountMatch
+//      } else {
+//        return doesSauceAmountMatch && sandwhich.name.lowercased()
+//          .contains(searchText.lowercased())
+//      }
+//    }
+//
+//    tableView.reloadData()
   }
   
   var isFiltering: Bool {
-    let searchBarScopeIsFiltering =
-      searchController.searchBar.selectedScopeButtonIndex != 0
+    let searchBarScopeIsFiltering = searchController.searchBar.selectedScopeButtonIndex != 0
     return searchController.isActive &&
       (!isSearchBarEmpty || searchBarScopeIsFiltering)
   }
@@ -157,6 +163,16 @@ class SandwichViewController: UITableViewController, SandwichDataSource {
 
     return cell
   }
+    
+  override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    if editingStyle == .delete {
+      let sandwich = sandwiches[indexPath.row]
+      sandwiches.remove(at: indexPath.row)
+      tableView.deleteRows(at: [indexPath], with: .fade)
+      deleteSandwich(sandwich)
+    }
+  }
+    
 }
 
 // MARK: - UISearchResultsUpdating
