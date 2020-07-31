@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias ClueResponse<T> = (Result<T, Error>) -> Void
+typealias ClueResponse<T: Decodable> = (Result<T, Error>) -> Void
 
 class Networking {
     
@@ -29,7 +29,20 @@ class Networking {
         }.resume()
     }
     
-    private func getARandomCategory(completion: @escaping (Clue) -> Void) {
+    func getHeaderImage(completion: @escaping (Data?) -> Void) {
+        let endpoint = Endpoints.getHeaderImage.rawValue
+        guard let url = URL(string: endpoint) else { return }
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let _ = error {
+                completion(nil)
+            }
+            if let data = data {
+                completion(data)
+            }
+        }.resume()
+    }
+    
+    func getARandomCategory(completion: @escaping (Clue) -> Void) {
         let url = Endpoints.baseURL.rawValue + Endpoints.getRandomClue.rawValue
         sendRequest(endpoint: url) { (result: Result<[Clue], Error>)  in
             switch result {
@@ -55,19 +68,13 @@ class Networking {
     }
     
     private func processOptionsResponse(clues: [Clue]) -> [String] {
+        let optionsMapped = clues.map { return $0.answer }
+        let clearedOptions = Array(Set(optionsMapped))
         var options = [String]()
-        for clue in clues where clues.count <= 4 {
-            options.append(clue.answer)
+        for option in clearedOptions where options.count < 3 {
+            options.append(option)
         }
         return options
-    }
-    
-    func setupGame(completion: @escaping () -> Void) {
-        getARandomCategory(completion: { clue in
-            let categoryId = clue.categoryId
-            self.getOptions(categoryId) { clues in
-            }
-        })
     }
     
 }

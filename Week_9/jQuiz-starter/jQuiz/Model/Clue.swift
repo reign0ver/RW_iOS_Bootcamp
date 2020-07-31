@@ -13,13 +13,11 @@ struct Clue: Decodable {
     let id: Int
     let answer: String
     let question: String
-    let value: Int
+//    let value: Int
     let airDate: String
     let createdAt: String
     let updatedAt: String
     let categoryId: Int
-    let gameId: Int?
-    let invalidCount: Int?
     let category: Category
     
     private enum CodingKeys: CodingKey {
@@ -27,7 +25,7 @@ struct Clue: Decodable {
         case answer
         case question
         case value
-        case airDate
+        case airdate
         case created_at
         case updated_at
         case category_id
@@ -42,13 +40,11 @@ struct Clue: Decodable {
         self.id             = try container.decode(Int.self, forKey: .id)
         self.answer         = try container.decode(String.self, forKey: .answer)
         self.question       = try container.decode(String.self, forKey: .question)
-        self.value          = try container.decode(Int.self, forKey: .value)
-        self.airDate        = try container.decode(String.self, forKey: .airDate)
+//        self.value          = try container.decode(Int.self, forKey: .value)
+        self.airDate        = try container.decode(String.self, forKey: .airdate)
         self.createdAt      = try container.decode(String.self, forKey: .created_at)
         self.updatedAt      = try container.decode(String.self, forKey: .updated_at)
         self.categoryId     = try container.decode(Int.self, forKey: .category_id)
-        self.gameId         = try container.decode(Int.self, forKey: .game_id)
-        self.invalidCount   = try container.decode(Int.self, forKey: .invalid_count)
         self.category       = try container.decode(Category.self, forKey: .category)
     }
 }

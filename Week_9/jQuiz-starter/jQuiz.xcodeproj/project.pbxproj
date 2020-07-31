@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2237DEFB24D3BB9F0080AE43 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2237DEF924D3BB9F0080AE43 /* TableViewCell.swift */; };
+		2237DEFC24D3BB9F0080AE43 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2237DEFA24D3BB9F0080AE43 /* TableViewCell.xib */; };
 		2273FD4524D398B800BC6218 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2273FD4424D398B800BC6218 /* Category.swift */; };
 		2273FD4D24D399F900BC6218 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2273FD4C24D399F900BC6218 /* Endpoints.swift */; };
 		C3DF5B7724C2549400F6D3EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF5B7624C2549400F6D3EC /* AppDelegate.swift */; };
@@ -40,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2237DEF924D3BB9F0080AE43 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		2237DEFA24D3BB9F0080AE43 /* TableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewCell.xib; sourceTree = "<group>"; };
 		2273FD4424D398B800BC6218 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		2273FD4C24D399F900BC6218 /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
 		C3DF5B7324C2549400F6D3EC /* jQuiz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jQuiz.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,6 +88,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2237DEF824D3BB880080AE43 /* AnswerCell */ = {
+			isa = PBXGroup;
+			children = (
+				2237DEF924D3BB9F0080AE43 /* TableViewCell.swift */,
+				2237DEFA24D3BB9F0080AE43 /* TableViewCell.xib */,
+			);
+			path = AnswerCell;
+			sourceTree = "<group>";
+		};
 		2273FD4624D398C400BC6218 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -96,6 +109,7 @@
 		2273FD4724D3990200BC6218 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2237DEF824D3BB880080AE43 /* AnswerCell */,
 				C3DF5B7C24C2549400F6D3EC /* Main.storyboard */,
 			);
 			path = View;
@@ -276,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3DF5B8624C2549A00F6D3EC /* LaunchScreen.storyboard in Resources */,
+				2237DEFC24D3BB9F0080AE43 /* TableViewCell.xib in Resources */,
 				C3DF5B8324C2549A00F6D3EC /* Assets.xcassets in Resources */,
 				C3DF5B7E24C2549400F6D3EC /* Main.storyboard in Resources */,
 				C3DF5BAB24C256CF00F6D3EC /* Jeopardy-theme-song.mp3 in Resources */,
@@ -308,6 +323,7 @@
 				C3DF5B7B24C2549400F6D3EC /* ViewController.swift in Sources */,
 				C3DF5B7724C2549400F6D3EC /* AppDelegate.swift in Sources */,
 				C3DF5B7924C2549400F6D3EC /* SceneDelegate.swift in Sources */,
+				2237DEFB24D3BB9F0080AE43 /* TableViewCell.swift in Sources */,
 				C3DF5BB024C260A600F6D3EC /* Clue.swift in Sources */,
 				C3FBE53824C4DEA300D11A30 /* ImageCache.swift in Sources */,
 				C3FBE53624C2877C00D11A30 /* SoundManager.swift in Sources */,
