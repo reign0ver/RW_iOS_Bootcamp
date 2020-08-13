@@ -16,6 +16,11 @@ class ViewController: UIViewController {
     private var bottomZoomConstraint: NSLayoutConstraint!
     
     private var menuIsHidden = true
+    private var shouldAnimate = true
+    
+    private var transformAndScaled: CGAffineTransform?
+    private var scaledOnly: CGAffineTransform?
+    private var backgroundColorObject: UIColor?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,32 +39,55 @@ class ViewController: UIViewController {
     @objc
     private func playButtonAction() {
         menuIsHidden = !menuIsHidden
+        shouldAnimate = !shouldAnimate
         animateMenu()
+        if shouldAnimate {
+            runSelectedAnimations()
+        }
+    }
+    
+    private func runSelectedAnimations() {
+        if let transform = transformAndScaled {
+            UIView.animate(withDuration: 1) {
+                self.objectView.transform = transform
+            }
+        }
+        if let zoom = scaledOnly {
+            UIView.animate(withDuration: 3) {
+                self.objectView.transform = zoom
+            }
+        }
+        if let backgroundColor = backgroundColorObject {
+            UIView.animate(withDuration: 1 / 2) {
+                self.objectView.backgroundColor = backgroundColor
+            }
+        }
         resetAnimations()
     }
     
     @objc
     private func rotateAction() {
-        UIView.animate(withDuration: 1) {
-            self.objectView.transform = CGAffineTransform(rotationAngle: .pi / 2)
-        }
+        transformAndScaled = CGAffineTransform(rotationAngle: .pi / 2).scaledBy(x: 1.2, y: 1.2)
     }
     
     @objc
     private func changeColorAction() {
-        UIView.animate(withDuration: 1) {
-            self.objectView.backgroundColor = .cyan
-        }
+        backgroundColorObject = .cyan
     }
     
     @objc
     private func zoomAction() {
-        
+        scaledOnly = CGAffineTransform(rotationAngle: 0).scaledBy(x: 2, y: 2)
     }
     
     private func resetAnimations() {
-        objectView.backgroundColor = .systemGray
-        objectView.transform = .init(translationX: 0, y: 0)
+        UIView.animate(withDuration: 1, animations: {
+            self.transformAndScaled = nil
+            self.scaledOnly = nil
+            self.objectView.backgroundColor = .systemGray
+            self.objectView.transform = .init(translationX: 0, y: 0)
+        }, completion: nil)
+
     }
     
     private func animateMenu() {
